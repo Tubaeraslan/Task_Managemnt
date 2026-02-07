@@ -4,6 +4,7 @@ import com.example.taskmanagement.dto.request.TaskRequestDto;
 import com.example.taskmanagement.dto.response.TaskResponseDto;
 import com.example.taskmanagement.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,17 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<TaskResponseDto> create(@RequestBody TaskRequestDto requestDto){
-        return ResponseEntity.ok(taskService.create(requestDto));
+    public ResponseEntity<TaskResponseDto> create(
+            @RequestBody TaskRequestDto requestDto) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(taskService.create(requestDto));
     }
 
     @GetMapping
     public ResponseEntity<List<TaskResponseDto>> getAll() {
-        return ResponseEntity.ok(taskService.gelAll());
+        return ResponseEntity.ok(taskService.getAll());
     }
 
     @GetMapping("/{id}")
@@ -35,6 +40,7 @@ public class TaskController {
     public ResponseEntity<TaskResponseDto> update(
             @PathVariable Long id,
             @RequestBody TaskRequestDto request) {
+
         return ResponseEntity.ok(taskService.update(id, request));
     }
 
