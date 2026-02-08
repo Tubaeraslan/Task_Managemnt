@@ -3,6 +3,7 @@ package com.example.taskmanagement.service;
 import com.example.taskmanagement.dto.request.TaskRequestDto;
 import com.example.taskmanagement.dto.response.TaskResponseDto;
 import com.example.taskmanagement.entity.Task;
+import com.example.taskmanagement.exception.ResourceNotFoundException;
 import com.example.taskmanagement.mapper.TaskMapper;
 import com.example.taskmanagement.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskResponseDto getById(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(()->
-                new RuntimeException("Task not found"));
+                new ResourceNotFoundException("Cannot found task"));
 
         return taskMapper.toDto(task);
     }

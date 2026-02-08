@@ -3,6 +3,7 @@ package com.example.taskmanagement.service;
 import com.example.taskmanagement.dto.request.UserRequestDto;
 import com.example.taskmanagement.dto.response.UserResponseDto;
 import com.example.taskmanagement.entity.User;
+import com.example.taskmanagement.mapper.UserMapper;
 import com.example.taskmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public UserResponseDto create(UserRequestDto requestDto) {
@@ -22,29 +24,18 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Email already exists");
         }
 
-        User user = new User();
-        user.setEmail(requestDto.getEmail());
-        user.setPassword(requestDto.getPassword()); // 4. hafta encode edilecek
+        User user = userMapper.toEntity(requestDto);
 
         User saved = userRepository.save(user);
 
-        UserResponseDto response = new UserResponseDto();
-        response.setId(saved.getId());
-        response.setEmail(saved.getEmail());
-
-        return response;
+       return userMapper.toDto(saved);
     }
 
     @Override
     public List<UserResponseDto> getAll() {
         return userRepository.findAll()
                 .stream()
-                .map(user -> {
-                    UserResponseDto dto = new UserResponseDto();
-                    dto.setId(user.getId());
-                    dto.setEmail(user.getEmail());
-                    return dto;
-                })
+                .map(userMapper::toDto)
                 .toList();
     }
 
@@ -53,11 +44,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserResponseDto dto = new UserResponseDto();
-        dto.setId(user.getId());
-        dto.setEmail(user.getEmail());
-
-        return dto;
+        return userMapper.toDto(user);
     }
 
     @Override
