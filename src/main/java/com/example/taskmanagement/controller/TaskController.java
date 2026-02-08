@@ -3,6 +3,7 @@ package com.example.taskmanagement.controller;
 import com.example.taskmanagement.dto.request.TaskRequestDto;
 import com.example.taskmanagement.dto.response.TaskResponseDto;
 import com.example.taskmanagement.service.TaskService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<TaskResponseDto> create(
-            @RequestBody TaskRequestDto requestDto) {
+            @Valid @RequestBody TaskRequestDto requestDto) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
