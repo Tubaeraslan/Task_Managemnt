@@ -36,17 +36,14 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     public AuthResponse register(AuthRequest request) {
-        // Email zaten kayıtlı mı kontrol et
         if (userRepository.existsByEmail(request.email())) {
             throw new RuntimeException("Bu email adresi zaten kullanılıyor!");
         }
 
-        // Yeni kullanıcı oluştur
         User user = new User();
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
 
-        // Varsayılan rol ata (USER)
         Role userRole = roleRepository.findByName("ROLE_USER")
                 .orElseGet(() -> {
                     Role newRole = new Role();
@@ -58,21 +55,19 @@ public class AuthService {
         roles.add(userRole);
         user.setRoles(roles);
 
-        // Kullanıcıyı kaydet
         userRepository.save(user);
 
-        // Token oluştur ve döndür
         String token = jwtUtil.generateToken(user.getEmail());
         return new AuthResponse(token, user.getEmail());
     }
 
     public AuthResponse login(AuthRequest request) {
-        // Kullanıcı doğrulama
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
 
-        // Token oluştur ve döndür
+
         String token = jwtUtil.generateToken(request.email());
         return new AuthResponse(token, request.email());
     }
