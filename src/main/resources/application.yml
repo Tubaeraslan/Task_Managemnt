@@ -12,3 +12,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+jwt:
+  secret: mySecretKeyForTaskManagementApplicationThatIsLongEnoughForHS256Algorithm
+  expiration: 86400000  # 24 saat (milisaniye cinsinden)
