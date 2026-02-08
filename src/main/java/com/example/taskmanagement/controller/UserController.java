@@ -3,6 +3,7 @@ package com.example.taskmanagement.controller;
 import com.example.taskmanagement.dto.request.UserRequestDto;
 import com.example.taskmanagement.dto.response.UserResponseDto;
 import com.example.taskmanagement.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> create(@RequestBody UserRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserRequestDto requestDto) {
         return ResponseEntity.ok(userService.create(requestDto));
     }
 

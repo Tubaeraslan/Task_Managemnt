@@ -3,6 +3,7 @@ package com.example.taskmanagement.service;
 import com.example.taskmanagement.dto.request.UserRequestDto;
 import com.example.taskmanagement.dto.response.UserResponseDto;
 import com.example.taskmanagement.entity.User;
+import com.example.taskmanagement.exception.ResourceNotFoundException;
 import com.example.taskmanagement.mapper.UserMapper;
 import com.example.taskmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User cannot found"));
 
         return userMapper.toDto(user);
     }

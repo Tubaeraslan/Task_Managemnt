@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskResponseDto update(Long id, TaskRequestDto requestDto) {
         Task task = taskRepository.findById(id).orElseThrow(()->
-                new RuntimeException("Task not found"));
+                new ResourceNotFoundException("Task cannot found"));
         task.setTitle(requestDto.getTitle());
         task.setDescription(requestDto.getDescription());
         Task updated = taskRepository.save(task);
